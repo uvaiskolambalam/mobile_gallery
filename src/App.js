@@ -1,6 +1,5 @@
 import { Fragment } from "react";
-import Header from "./Components/Header/Header";
-import ProductList from "./Components/ProductList/ProductList";
+import {ProductList,Header} from "./Components";
 
 
 
