@@ -10,11 +10,24 @@
 // when button clicked this arrived in to REDUCER
 // then REDUCER will be update the state
 // then the PROVIDER will injuct all updated datas to react
-import { createSlice } from '@reduxjs/toolkit'
+
+
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import axios from 'axios'
+
+
+export const fetchUser = createAsyncThunk('/cart/fetchUser', async(id) => {
+    const response = await axios.get(`https://jsonplaceholder.typicode.com/todos/${id}`)
+    console.log(response.data,'data');
+    return response
+
+    //in fetchUser have pending, fullfill, rejected(promise methods)
+})
 
 const INITIAL_STATE = {
     cartList: [],
-    cartCount:0
+    cartCount: 0,
+    userDetails:[]
 };
 const cartSlice = createSlice({
     name: 'cart',
@@ -53,6 +66,23 @@ const cartSlice = createSlice({
                 
             })
         }
+        
+    },
+    extraReducers: {
+        // we can manipulate api here, if pending or fullfilled or rejected , its all promise methods
+        [fetchUser.pending]: (state, action) => { 
+            console.log("Loading Start");
+        }, 
+        [fetchUser.fulfilled]: (state, action) => { 
+            console.log("Loading End");
+            console.log("Success");
+            state.userDetails.push(action.payload.data)
+        },
+        [fetchUser.rejected]: (state, action) => {
+            console.log("Loading End");
+            console.log("Error");
+            
+         }
         
     }
 })
